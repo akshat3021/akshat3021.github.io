@@ -211,7 +211,7 @@
         }
         .project-link:hover { text-decoration: underline; }
 
-        /* --- CERTIFICATES --- */
+        /* --- CERTIFICATES & ASSIGNMENTS --- */
         .cert-card, .assignment-card {
             display: flex; gap: 1.2rem; align-items: flex-start;
             background: white; padding: 1.5rem;
@@ -393,20 +393,38 @@
                     <div class="cert-card">
                         <div class="cert-icon">🏅</div>
                         <div class="cert-info">
-                            <h3>NSS Leader Award</h3>
-                            <p>Recognition for leadership & service.</p>
+                            <h3>NSS Certificate</h3>
+                            <p>Dedicated volunteer: Leadership & public speaking.</p>
                             <button onclick="openPdf('assets/nss-cert.pdf')" class="action-btn">View Certificate</button>
                         </div>
                     </div>
 
-                    <h2 class="column-title" style="margin-top: 3rem;">📚 Profile & Resume</h2>
+                    <h2 class="column-title" style="margin-top: 3rem;">📚 Assignments</h2>
                     
                     <div class="assignment-card">
                         <div class="cert-icon">📄</div>
                         <div class="cert-info">
                             <h3>Profiling Sheet</h3>
                             <p>A comprehensive overview of my academic and professional journey.</p>
-                            <button onclick="openPdf('assets/profiling.pdf')" class="action-btn">👁️ View PDF Document</button>
+                            <button onclick="openPdf('assets/profiling.pdf')" class="action-btn">👁️ View Document</button>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card">
+                        <div class="cert-icon">📊</div>
+                        <div class="cert-info">
+                            <h3> Presentation</h3>
+                            <p> PPT on Understanding-Politics-and-Democracy.</p>
+                            <button onclick="openPdf('assets/presentation.pdf')" class="action-btn">▶ View Slides</button>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card">
+                        <div class="cert-icon">📝</div>
+                        <div class="cert-info">
+                            <h3>Classroom Key Learnings</h3>
+                            <p>Notes and takeaways from PESE Lab.</p>
+                            <button onclick="openPdf('assets/class-learnings.pdf')" class="action-btn">📖 Read Notes</button>
                         </div>
                     </div>
                     
@@ -431,15 +449,11 @@
 
         // PDF MODAL LOGIC
         function openPdf(pdfUrl) {
-            // 1. Set the source of the iframe to the specific PDF clicked
             document.getElementById('pdfViewer').src = pdfUrl;
-            // 2. Show the modal
             document.getElementById('pdfModal').style.display = 'flex';
         }
         function closePdf() {
-            // 1. Hide the modal
             document.getElementById('pdfModal').style.display = 'none';
-            // 2. Clear the src so it doesn't keep the old one loaded
             document.getElementById('pdfViewer').src = "";
         }
     </script>

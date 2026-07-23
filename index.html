@@ -49,12 +49,14 @@
     /* ── DESIGN TOKENS ──────────────────────────────────────── */
     :root {
       --bg:      hsl(0 0% 4%);
-      --surface: hsl(0 0% 8%);
+      --surface: rgba(15, 15, 15, 0.7);
       --text:    hsl(0 0% 96%);
-      --muted:   hsl(0 0% 53%);
-      --stroke:  hsl(0 0% 12%);
+      --muted:   hsl(0 0% 63%);
+      --stroke:  rgba(255, 255, 255, 0.08);
       --a1: #89AACC;
       --a2: #4E85BF;
+      --a3: #7c3aed; /* soft purple ambient */
+      --a4: #38bdf8; /* electric cyan ambient */
       --ff-body:    'Inter', sans-serif;
       --ff-display: 'Instrument Serif', serif;
     }
@@ -64,12 +66,84 @@
       font-family: var(--ff-body);
       background: var(--bg); color: var(--text);
       overflow-x: hidden; -webkit-font-smoothing: antialiased;
+      cursor: none; /* Hide default cursor for custom cinematic cursor */
     }
-    a { text-decoration: none; color: inherit; }
-    button { font-family: var(--ff-body); cursor: pointer; border: none; background: none; color: inherit; }
+    a { text-decoration: none; color: inherit; cursor: none; }
+    button { font-family: var(--ff-body); cursor: none; border: none; background: none; color: inherit; }
     img { display: block; max-width: 100%; }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: var(--stroke); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+
+    /* ── LIVING BACKGROUND ──────────────────────────────────── */
+    .bg-universe {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, #080816 0%, #030308 50%, #000000 100%);
+      overflow: hidden;
+    }
+    .bg-aurora {
+      position: absolute; width: 80vw; height: 80vw; border-radius: 50%;
+      top: -20%; left: -10%; filter: blur(150px);
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+      pointer-events: none; animation: aurora-float-1 30s infinite alternate ease-in-out;
+    }
+    .bg-aurora-2 {
+      position: absolute; width: 60vw; height: 60vw; border-radius: 50%;
+      bottom: -10%; right: -10%; filter: blur(140px);
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.06) 0%, transparent 70%);
+      pointer-events: none; animation: aurora-float-2 25s infinite alternate ease-in-out;
+    }
+    @keyframes aurora-float-1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(8vw, 5vh) scale(1.15); }
+    }
+    @keyframes aurora-float-2 {
+      0% { transform: translate(0, 0) scale(1.1); }
+      100% { transform: translate(-6vw, -8vh) scale(0.9); }
+    }
+    .bg-universe canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+    }
+
+    /* ── CUSTOM PREMIUM CURSOR ──────────────────────────────── */
+    #c-cursor {
+      position: fixed; top: 0; left: 0; width: 10px; height: 10px;
+      background: #fff; border-radius: 50%; z-index: 10000;
+      pointer-events: none; transform: translate(-50%, -50%);
+      mix-blend-mode: difference; transition: width 0.2s, height 0.2s, background-color 0.2s;
+    }
+    #c-cursor-ring {
+      position: fixed; top: 0; left: 0; width: 44px; height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 50%; z-index: 9999;
+      pointer-events: none; transform: translate(-50%, -50%);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #c-cursor-ring span {
+      font-size: 8px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700;
+      color: #fff; opacity: 0; transform: scale(0.8); transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap; pointer-events: none;
+    }
+    /* Cursor Hover/Interactive States */
+    body.c-hover-active #c-cursor { width: 6px; height: 6px; background-color: var(--a1); }
+    body.c-hover-active #c-cursor-ring {
+      width: 64px; height: 64px; border-color: var(--a1);
+      background: rgba(137, 170, 204, 0.08);
+      backdrop-filter: blur(2px);
+    }
+    body.c-explore-active #c-cursor { opacity: 0; }
+    body.c-explore-active #c-cursor-ring {
+      width: 72px; height: 72px; border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    body.c-explore-active #c-cursor-ring span { opacity: 1; transform: scale(1); }
+
+    /* Disable custom cursor on touch devices */
+    @media (pointer: coarse) {
+      body { cursor: auto; }
+      #c-cursor, #c-cursor-ring { display: none !important; }
+      a, button { cursor: pointer; }
+    }
 
     /* ── ACCENT ─────────────────────────────────────────────── */
     .ag { background: linear-gradient(90deg, var(--a1), var(--a2)); }
@@ -105,7 +179,7 @@
     /* ── LOADING ────────────────────────────────────────────── */
     #ls {
       position: fixed; inset: 0; z-index: 9999;
-      background: var(--bg);
+      background: #000;
       display: flex; flex-direction: column;
       padding: 2rem 2.5rem;
       transition: opacity .55s ease, visibility .55s ease;
@@ -154,26 +228,35 @@
       display: flex; justify-content: center;
       padding: 1.1rem 1rem 0;
       pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    }
+    #nav.nav-hidden {
+      transform: translateY(-100%); opacity: 0;
     }
     .nav-pill {
       pointer-events: all;
       display: inline-flex; align-items: center;
       border-radius: 9999px;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,.09);
-      background: rgba(20,20,20,.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(10, 10, 10, 0.5);
       padding: .45rem;
       gap: 0;
-      transition: box-shadow .3s;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+    .nav-pill:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px 0 rgba(137,170,204, 0.05);
     }
     .nav-pill.sc { box-shadow: 0 8px 32px rgba(0,0,0,.5); }
 
     .nav-logo {
       width: 34px; height: 34px; border-radius: 50%;
-      position: relative; cursor: pointer;
+      position: relative; cursor: none;
       transition: transform .3s; flex-shrink: 0;
     }
-    .nav-logo:hover { transform: scale(1.1); }
+    .nav-logo:hover { transform: scale(1.05); }
     .nav-logo-bg {
       position: absolute; inset: -2px; border-radius: 50%;
       background: linear-gradient(135deg, var(--a1), var(--a2));
@@ -183,7 +266,7 @@
     }
     .nav-logo-face {
       position: absolute; inset: 2px; border-radius: 50%;
-      background: var(--bg);
+      background: #000;
       display: flex; align-items: center; justify-content: center;
       font-family: var(--ff-display); font-style: italic;
       font-size: 12px; color: var(--text);
@@ -194,13 +277,22 @@
     .nav-a {
       font-size: .78rem; border-radius: 9999px;
       padding: 5px 13px; color: var(--muted);
-      transition: color .2s, background .2s; cursor: pointer;
+      transition: color .3s, background .3s; cursor: none;
       white-space: nowrap; user-select: none;
+      position: relative;
     }
-    .nav-a.on, .nav-a:hover { color: var(--text); background: rgba(255,255,255,.06); }
+    .nav-a.on, .nav-a:hover { color: var(--text); background: rgba(255,255,255,.05); }
+
+    /* Scroll progress nav glow indicator */
+    .nav-progress-dot {
+      position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%; background: var(--a1);
+      box-shadow: 0 0 8px var(--a1); opacity: 0; transition: opacity 0.3s;
+    }
+    .nav-a.on .nav-progress-dot { opacity: 1; }
 
     .nav-hi {
-      position: relative; border-radius: 9999px; cursor: pointer;
+      position: relative; border-radius: 9999px; cursor: none;
     }
     .nav-hi-ring {
       position: absolute; inset: -2px; border-radius: 9999px;
@@ -265,12 +357,13 @@
     .btn-s, .btn-o {
       border-radius: 9999px; font-size: .875rem;
       padding: .85rem 1.85rem; position: relative;
-      overflow: hidden; transition: transform .25s;
-      display: inline-flex; align-items: center; cursor: pointer;
+      overflow: hidden; transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+      display: inline-flex; align-items: center; cursor: none;
     }
     .btn-s { background: var(--text); color: var(--bg); border: none; }
-    .btn-o { background: var(--bg); color: var(--text); border: 2px solid var(--stroke); }
-    .btn-s:hover, .btn-o:hover { transform: scale(1.05); }
+    .btn-o { background: rgba(0,0,0,0.3); color: var(--text); border: 1px solid var(--stroke); backdrop-filter: blur(10px); }
+    .btn-s:hover { box-shadow: 0 0 25px rgba(255,255,255,0.15); transform: translateY(-2px); }
+    .btn-o:hover { border-color: rgba(255, 255, 255, 0.25); transform: translateY(-2px); box-shadow: 0 0 25px rgba(255,255,255,0.05); }
     .btn-ring {
       position: absolute; inset: -2px; border-radius: 9999px;
       background: linear-gradient(90deg, var(--a1), var(--a2));
@@ -316,56 +409,270 @@
     .rv.d4 { transition-delay: .4s; }
     .rv.d5 { transition-delay: .5s; }
 
-    /* ── WORKS ──────────────────────────────────────────────── */
-    #works { background: var(--bg); padding: 5rem 0 6rem; }
-
-    .bento { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
-    @media(min-width:768px) {
-      .bento { grid-template-columns: repeat(12, 1fr); }
-      .c7 { grid-column: span 7; }
-      .c5 { grid-column: span 5; }
+    /* ── WORKS (FEATURED PROJECTS REDESIGN) ──────────────────── */
+    #works { background: var(--bg); padding: 5rem 0 6rem; position: relative; }
+    
+    /* Premium Two-Column Layout */
+    .bento {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    @media(min-width: 768px) {
+      .bento {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
+    /* Premium Product Card Frame */
     .pc {
-      border-radius: 1.5rem; overflow: hidden;
-      border: 1px solid var(--stroke); background: var(--surface);
-      position: relative; cursor: pointer;
-      aspect-ratio: 4/3;
-      transition: border-color .35s;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(10, 10, 15, 0.4);
+      position: relative;
+      cursor: none;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+      padding: 0;
     }
-    @media(min-width:768px){ .pc { aspect-ratio: auto; min-height: 300px; } }
-    .pc:hover { border-color: rgba(255,255,255,.12); }
+    
+    /* macOS-style Browser Frame Header */
+    .browser-header {
+      background: rgba(20, 20, 25, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 6px;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    .browser-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .browser-dot.close { background: #ff5f56; }
+    .browser-dot.minimize { background: #ffbd2e; }
+    .browser-dot.maximize { background: #27c93f; }
+    
+    .browser-address {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 2px 24px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
 
-    .pc-bg { position: absolute; inset: 0; transition: transform .65s ease; }
-    .pc:hover .pc-bg { transform: scale(1.055); }
+    /* Interactive Viewport Area */
+    .pc-viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: #06060c;
+    }
 
-    .pc-ht {
-      position: absolute; inset: 0; opacity: .18; mix-blend-mode: multiply;
-      background-image: radial-gradient(circle, #000 1px, transparent 1px);
-      background-size: 4px 4px;
+    .pc-bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+      filter: brightness(0.9) contrast(1.02);
     }
-    .pc-ov {
-      position: absolute; inset: 0;
-      background: rgba(10,10,10,.72); backdrop-filter: blur(14px);
-      opacity: 0; transition: opacity .32s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .pc:hover .pc-ov { opacity: 1; }
-    .pc-pill-wrap { border-radius: 9999px; padding: 2px; background: linear-gradient(90deg, var(--a1), var(--a2)); }
-    .pc-pill {
-      background: rgba(245,245,245,.96); color: #0a0a0a;
-      border-radius: 9999px; padding: .5rem 1.3rem;
-      font-size: .82rem; white-space: nowrap;
-    }
-    .pc-pill em { font-family: var(--ff-display); font-style: italic; }
-    .pc-info {
-      position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem;
-      background: linear-gradient(to top, rgba(0,0,0,.85), transparent);
-    }
-    .pc-title { font-size: 1.05rem; font-weight: 500; margin-bottom: .25rem; }
-    .pc-tag { font-size: .68rem; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
 
-    /* card art */
+    /* Dynamic soft hover spotlight light rays */
+    .pc-spotlight {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(137, 170, 204, 0.08) 0%, transparent 60%);
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .pc:hover .pc-spotlight {
+      opacity: 1;
+    }
+
+    /* Custom Ambient Glow Backdrop */
+    .pc-glow {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.15;
+      filter: blur(40px);
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    /* Minimalist Elegant Glass Details Overlay */
+    .pc-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(10, 10, 12, 0.95) 0%, rgba(10, 10, 12, 0.8) 80%, rgba(10, 10, 12, 0) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 1.75rem 2rem 1.5rem;
+      transform: translateY(30px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 8;
+    }
+
+    .pc-overlay-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .pc-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    
+    .pc-year {
+      color: var(--muted);
+    }
+
+    .pc-status {
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      background: rgba(74, 222, 128, 0.05);
+      border-radius: 99px;
+      padding: 2px 8px;
+      color: #4ade80;
+    }
+    .pc-status.completed {
+      border-color: rgba(137, 170, 204, 0.3);
+      background: rgba(137, 170, 204, 0.05);
+      color: var(--a1);
+    }
+
+    .pc-title {
+      font-family: var(--ff-body);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .pc-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+      opacity: 0.9;
+    }
+
+    /* Actions and Buttons inside Overlay */
+    .pc-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      gap: 1rem;
+    }
+
+    .pc-tech-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      max-width: 60%;
+    }
+
+    .pc-tech-badge {
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 99px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .pc-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .pc-link-btn {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.45rem 1rem;
+      border-radius: 99px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.3s ease;
+      cursor: none;
+    }
+    .pc-link-btn.primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .pc-link-btn.secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+    .pc-link-btn.primary:hover {
+      background: var(--bg);
+      color: var(--text);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+    .pc-link-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Elegant Hover Interactive Overrides */
+    .pc:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 40px 80px -25px rgba(0, 0, 0, 0.9),
+                  0 0 40px -10px rgba(137, 170, 204, 0.06);
+    }
+    .pc:hover .pc-bg {
+      transform: scale(1.05);
+      filter: brightness(0.95) contrast(1.05);
+    }
+    .pc:hover .pc-glow {
+      opacity: 0.25;
+    }
+    .pc:hover .pc-overlay {
+      transform: translateY(0);
+    }
+    .pc:hover .pc-actions {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.1s;
+    }
+
+    /* card art ambient glow colors */
     .orb { position: absolute; border-radius: 50%; filter: blur(45px); opacity: .55; }
 
     /* ── ABOUT ──────────────────────────────────────────────── */
@@ -685,6 +992,17 @@
 </head>
 <body>
 
+<!-- ── Living background ── -->
+<div class="bg-universe" aria-hidden="true">
+  <div class="bg-aurora"></div>
+  <div class="bg-aurora-2"></div>
+  <canvas id="universe-canvas"></canvas>
+</div>
+
+<!-- ── Custom Cursor ── -->
+<div id="c-cursor" aria-hidden="true"></div>
+<div id="c-cursor-ring" aria-hidden="true"><span>Explore</span></div>
+
 <!-- ═══ LOADING ═══ -->
 <div id="ls" role="status" aria-label="Loading portfolio">
   <div class="ls-label" id="ls-lbl">Portfolio</div>
@@ -707,11 +1025,11 @@
       <div class="nav-logo-face">AA</div>
     </div>
     <div class="nav-sep" role="separator"></div>
-    <span class="nav-a on" onclick="goTo('hero')" role="button" tabindex="0">Home</span>
-    <span class="nav-a" onclick="goTo('about')" role="button" tabindex="0">About</span>
-    <span class="nav-a" onclick="goTo('experience')" role="button" tabindex="0">Experience</span>
-    <span class="nav-a" onclick="goTo('works')" role="button" tabindex="0">Work</span>
-    <span class="nav-a" onclick="goTo('skills')" role="button" tabindex="0">Skills</span>
+    <span class="nav-a on" onclick="goTo('hero')" role="button" tabindex="0">Home<div class="nav-progress-dot"></div></span>
+    <span class="nav-a" onclick="goTo('about')" role="button" tabindex="0">About<div class="nav-progress-dot"></div></span>
+    <span class="nav-a" onclick="goTo('experience')" role="button" tabindex="0">Experience<div class="nav-progress-dot"></div></span>
+    <span class="nav-a" onclick="goTo('works')" role="button" tabindex="0">Work<div class="nav-progress-dot"></div></span>
+    <span class="nav-a" onclick="goTo('skills')" role="button" tabindex="0">Skills<div class="nav-progress-dot"></div></span>
     <div class="nav-sep" role="separator"></div>
     <div class="nav-hi" onclick="goTo('footer')" role="button" tabindex="0" aria-label="Go to contact section">
       <div class="nav-hi-ring"></div>
@@ -871,168 +1189,190 @@
     <div class="bento">
 
       <!-- Aegis Intelligence -->
-      <article class="pc c7 rv" onclick="openModal('aegis')" role="button" tabindex="0" aria-label="View Aegis Intelligence project details">
-        <div class="pc-bg" style="background:linear-gradient(160deg,#06062a 0%,#140e50 45%,#200d40 100%);" aria-hidden="true">
-          <div class="orb" style="width:240px;height:240px;background:#4f3dd4;top:-60px;left:-40px;opacity:.5;"></div>
-          <div class="orb" style="width:140px;height:140px;background:#7c3aed;bottom:20px;right:30px;opacity:.45;"></div>
-          <div style="position:absolute;inset:0;overflow:hidden;display:flex;flex-direction:column;padding:18px;gap:8px;justify-content:center;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
-              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(124,58,237,.6);">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1.5 14.5V7.5l7 4.5z"/></svg>
-              </div>
-              <div>
-                <div style="font-size:10px;color:rgba(255,255,255,.85);font-weight:600;">Aegis AI</div>
-                <div style="font-size:8px;color:#4ade80;display:flex;align-items:center;gap:3px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;display:inline-block;"></span>Online</div>
-              </div>
+      <article class="pc rv" onclick="openModal('aegis')" role="button" tabindex="0" aria-label="View Aegis Intelligence project details">
+        <!-- Ambient Color Glow backdrop -->
+        <div class="pc-glow" style="background: radial-gradient(circle, rgba(124,58,237,0.4) 0%, transparent 70%);"></div>
+        
+        <!-- macOS-style browser frame header -->
+        <div class="browser-header">
+          <span class="browser-dot close"></span>
+          <span class="browser-dot minimize"></span>
+          <span class="browser-dot maximize"></span>
+          <div class="browser-address">aegis-intelligence.app</div>
+        </div>
+
+        <div class="pc-viewport">
+          <!-- Spotlight Cursor lighting effect layer -->
+          <div class="pc-spotlight"></div>
+          <!-- Actual Screenshot center-fit image -->
+          <img src="assets/AGIES.png" alt="Aegis AI Chat interface" class="pc-bg" loading="lazy">
+        </div>
+
+        <!-- Glass bottom slider overlay -->
+        <div class="pc-overlay">
+          <div class="pc-overlay-header">
+            <div>
+              <h3 class="pc-title">Aegis Intelligence</h3>
             </div>
-            <div style="background:rgba(124,58,237,.28);border:1px solid rgba(139,92,246,.35);border-radius:10px 10px 10px 3px;padding:6px 10px;font-size:9px;color:rgba(255,255,255,.75);max-width:78%;align-self:flex-start;">Hello! I'm Aegis. How can I help today?</div>
-            <div style="background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:10px 10px 3px 10px;padding:6px 10px;font-size:9px;color:rgba(255,255,255,.75);max-width:72%;align-self:flex-end;">Set a reminder for my project</div>
-            <div style="background:rgba(124,58,237,.28);border:1px solid rgba(139,92,246,.35);border-radius:10px 10px 10px 3px;padding:6px 10px;font-size:9px;color:rgba(255,255,255,.75);max-width:78%;align-self:flex-start;">Sure! When would you like to be reminded?</div>
-            <div style="display:flex;align-items:center;gap:4px;margin-top:4px;">
-              <div style="flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:7px 12px;font-size:9px;color:rgba(255,255,255,.3);">Ask Aegis anything...</div>
-              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
-              </div>
+            <div class="pc-meta">
+              <span class="pc-year">2026</span>
+              <span class="pc-status">Live</span>
             </div>
           </div>
-        </div>
-        <div class="pc-ht" aria-hidden="true"></div>
-        <div class="pc-ov" aria-hidden="true">
-          <div class="pc-pill-wrap"><div class="pc-pill">Details — <em>Aegis Intelligence</em></div></div>
-        </div>
-        <div class="pc-info">
-          <div class="pc-title">Aegis Intelligence</div>
-          <div class="pc-tag">AI · Next.js · Supabase · Llama 3</div>
+          <p class="pc-desc">AI productivity companion featuring memory retention pipelines & 3D interface.</p>
+          <div class="pc-actions">
+            <div class="pc-tech-row">
+              <span class="pc-tech-badge">Next.js</span>
+              <span class="pc-tech-badge">Three.js</span>
+              <span class="pc-tech-badge">Supabase</span>
+              <span class="pc-tech-badge">Llama 3</span>
+            </div>
+            <div class="pc-links">
+              <a href="https://github.com/akshat3021" target="_blank" rel="noopener noreferrer" class="pc-link-btn secondary" onclick="event.stopPropagation();" aria-label="Aegis Github code">Source</a>
+              <a href="https://aegis-intelligence-v2.vercel.app" target="_blank" rel="noopener noreferrer" class="pc-link-btn primary" onclick="event.stopPropagation();" aria-label="Aegis Live site">Demo ↗</a>
+            </div>
+          </div>
         </div>
       </article>
 
       <!-- Cloud Storage -->
-      <article class="pc c5 rv d1" onclick="openModal('cloud')" role="button" tabindex="0" aria-label="View Cloud File Storage project details">
-        <div class="pc-bg" style="background:linear-gradient(160deg,#001525 0%,#002a50 50%,#001830 100%);" aria-hidden="true">
-          <div class="orb" style="width:180px;height:180px;background:#0369a1;top:-30px;right:-20px;opacity:.5;"></div>
-          <div class="orb" style="width:100px;height:100px;background:#38bdf8;bottom:30px;left:20px;opacity:.4;"></div>
-          <div style="position:absolute;inset:0;padding:16px;overflow:hidden;">
-            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(14,165,233,.15);border-radius:10px;overflow:hidden;height:100%;display:flex;flex-direction:column;">
-              <div style="background:rgba(255,255,255,.06);padding:7px 10px;display:flex;align-items:center;gap:5px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;">
-                <div style="width:7px;height:7px;border-radius:50%;background:rgba(255,90,90,.7);"></div>
-                <div style="width:7px;height:7px;border-radius:50%;background:rgba(255,200,0,.7);"></div>
-                <div style="width:7px;height:7px;border-radius:50%;background:rgba(50,200,80,.7);"></div>
-                <div style="flex:1;background:rgba(255,255,255,.06);border-radius:4px;height:12px;margin:0 6px;"></div>
-              </div>
-              <div style="padding:8px;display:flex;flex-direction:column;gap:5px;flex:1;overflow:hidden;">
-                <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:rgba(14,165,233,.18);border:1px solid rgba(14,165,233,.25);border-radius:6px;">
-                  <span style="font-size:13px;">📁</span>
-                  <span style="font-size:9px;color:rgba(255,255,255,.75);flex:1;">Projects</span>
-                  <span style="font-size:8px;color:var(--muted);">2.4 GB</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;">
-                  <span style="font-size:13px;">📄</span>
-                  <span style="font-size:9px;color:rgba(255,255,255,.6);flex:1;">resume.pdf</span>
-                  <span style="font-size:8px;color:var(--muted);">240 KB</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;">
-                  <span style="font-size:13px;">🖼️</span>
-                  <span style="font-size:9px;color:rgba(255,255,255,.6);flex:1;">portfolio.png</span>
-                  <span style="font-size:8px;color:var(--muted);">1.8 MB</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;">
-                  <span style="font-size:13px;">📦</span>
-                  <span style="font-size:9px;color:rgba(255,255,255,.6);flex:1;">source.zip</span>
-                  <span style="font-size:8px;color:var(--muted);">87 MB</span>
-                </div>
-              </div>
-              <div style="padding:7px 10px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;">
-                <div style="font-size:8px;color:var(--muted);margin-bottom:4px;">Storage used: 4.6 GB / 10 GB</div>
-                <div style="height:3px;background:rgba(255,255,255,.08);border-radius:2px;"><div style="width:46%;height:100%;background:linear-gradient(90deg,#0ea5e9,#38bdf8);border-radius:2px;"></div></div>
-              </div>
+      <article class="pc rv d1" onclick="openModal('cloud')" role="button" tabindex="0" aria-label="View Cloud File Storage project details">
+        <!-- Ambient Color Glow backdrop -->
+        <div class="pc-glow" style="background: radial-gradient(circle, rgba(14,165,233,0.35) 0%, transparent 70%);"></div>
+
+        <!-- macOS-style browser frame header -->
+        <div class="browser-header">
+          <span class="browser-dot close"></span>
+          <span class="browser-dot minimize"></span>
+          <span class="browser-dot maximize"></span>
+          <div class="browser-address">file-storage.net</div>
+        </div>
+
+        <div class="pc-viewport">
+          <!-- Spotlight Cursor lighting effect layer -->
+          <div class="pc-spotlight"></div>
+          <!-- Actual Screenshot center-fit image -->
+          <img src="assets/CLOUD_COMPUTING.png" alt="Cloud storage file upload details" class="pc-bg" loading="lazy">
+        </div>
+
+        <!-- Glass bottom slider overlay -->
+        <div class="pc-overlay">
+          <div class="pc-overlay-header">
+            <div>
+              <h3 class="pc-title">Cloud File Storage</h3>
+            </div>
+            <div class="pc-meta">
+              <span class="pc-year">2025</span>
+              <span class="pc-status">Live</span>
             </div>
           </div>
-        </div>
-        <div class="pc-ht" aria-hidden="true"></div>
-        <div class="pc-ov" aria-hidden="true">
-          <div class="pc-pill-wrap"><div class="pc-pill">Details — <em>Cloud Storage</em></div></div>
-        </div>
-        <div class="pc-info">
-          <div class="pc-title">Cloud File Storage</div>
-          <div class="pc-tag">Cloud · Supabase · Row-level Security</div>
+          <p class="pc-desc">Secure file browser platform featuring folder organization and quota tracking.</p>
+          <div class="pc-actions">
+            <div class="pc-tech-row">
+              <span class="pc-tech-badge">React</span>
+              <span class="pc-tech-badge">Supabase</span>
+              <span class="pc-tech-badge">Postgres</span>
+              <span class="pc-tech-badge">RLS Policies</span>
+            </div>
+            <div class="pc-links">
+              <a href="https://github.com/akshat3021" target="_blank" rel="noopener noreferrer" class="pc-link-btn secondary" onclick="event.stopPropagation();" aria-label="Cloud storage Github link">Source</a>
+              <a href="https://filedalokhiseb.netlify.app/" target="_blank" rel="noopener noreferrer" class="pc-link-btn primary" onclick="event.stopPropagation();" aria-label="Cloud storage live site">Demo ↗</a>
+            </div>
+          </div>
         </div>
       </article>
 
       <!-- CivicFix -->
-      <article class="pc c5 rv d2" onclick="openModal('civicfix')" role="button" tabindex="0" aria-label="View CivicFix project details">
-        <div class="pc-bg" style="background:linear-gradient(160deg,#030d03 0%,#081c08 50%,#041004 100%);" aria-hidden="true">
-          <div class="orb" style="width:200px;height:200px;background:#166534;top:-40px;left:10px;opacity:.5;"></div>
-          <div style="position:absolute;inset:0;overflow:hidden;">
-            <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(74,222,128,.04) 0px,rgba(74,222,128,.04) 1px,transparent 1px,transparent 38px),repeating-linear-gradient(90deg,rgba(74,222,128,.04) 0px,rgba(74,222,128,.04) 1px,transparent 1px,transparent 38px);"></div>
-            <div style="position:absolute;top:0;bottom:0;left:42%;width:2px;background:rgba(74,222,128,.08);"></div>
-            <div style="position:absolute;top:0;bottom:0;left:68%;width:2px;background:rgba(74,222,128,.06);"></div>
-            <div style="position:absolute;left:0;right:0;top:38%;height:2px;background:rgba(74,222,128,.08);"></div>
-            <div style="position:absolute;left:0;right:0;top:62%;height:2px;background:rgba(74,222,128,.06);"></div>
-            <div style="position:absolute;top:30%;left:36%;transform:translate(-50%,-100%);">
-              <div style="width:22px;height:22px;background:#ef4444;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 0 14px rgba(239,68,68,.7);"></div>
-              <div style="position:absolute;inset:0;border-radius:50%;background:rgba(239,68,68,.3);animation:ping-pulse 1.5s ease-out infinite;"></div>
+      <article class="pc rv d2" onclick="openModal('civicfix')" role="button" tabindex="0" aria-label="View CivicFix project details">
+        <!-- Ambient Color Glow backdrop -->
+        <div class="pc-glow" style="background: radial-gradient(circle, rgba(34,197,94,0.3) 0%, transparent 70%);"></div>
+
+        <!-- macOS-style browser frame header -->
+        <div class="browser-header">
+          <span class="browser-dot close"></span>
+          <span class="browser-dot minimize"></span>
+          <span class="browser-dot maximize"></span>
+          <div class="browser-address">civicfix.org</div>
+        </div>
+
+        <div class="pc-viewport">
+          <!-- Spotlight Cursor lighting effect layer -->
+          <div class="pc-spotlight"></div>
+          <!-- Actual Screenshot center-fit image -->
+          <img src="assets/CIVICFIX.png" alt="CivicFix dashboard and reports view" class="pc-bg" loading="lazy">
+        </div>
+
+        <!-- Glass bottom slider overlay -->
+        <div class="pc-overlay">
+          <div class="pc-overlay-header">
+            <div>
+              <h3 class="pc-title">CivicFix</h3>
             </div>
-            <div style="position:absolute;top:48%;left:63%;transform:translate(-50%,-100%);">
-              <div style="width:17px;height:17px;background:#f59e0b;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 0 10px rgba(245,158,11,.6);"></div>
-            </div>
-            <div style="position:absolute;top:66%;left:25%;transform:translate(-50%,-100%);">
-              <div style="width:15px;height:15px;background:#22c55e;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 0 8px rgba(34,197,94,.5);"></div>
-            </div>
-            <div style="position:absolute;top:22%;left:70%;transform:translate(-50%,-100%);">
-              <div style="width:14px;height:14px;background:#f59e0b;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 0 7px rgba(245,158,11,.5);"></div>
-            </div>
-            <div style="position:absolute;bottom:14px;left:14px;right:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);border:1px solid rgba(74,222,128,.18);border-radius:8px;padding:8px 10px;">
-              <div style="font-size:8px;color:rgba(74,222,128,.8);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Live Reports — Dehradun</div>
-              <div style="display:flex;gap:10px;">
-                <div style="font-size:10px;color:rgba(255,255,255,.7);"><span style="color:#ef4444;">●</span> 3 Critical</div>
-                <div style="font-size:10px;color:rgba(255,255,255,.7);"><span style="color:#f59e0b;">●</span> 7 Pending</div>
-                <div style="font-size:10px;color:rgba(255,255,255,.7);"><span style="color:#22c55e;">●</span> 12 Done</div>
-              </div>
+            <div class="pc-meta">
+              <span class="pc-year">2025</span>
+              <span class="pc-status">Live</span>
             </div>
           </div>
-        </div>
-        <div class="pc-ht" aria-hidden="true"></div>
-        <div class="pc-ov" aria-hidden="true">
-          <div class="pc-pill-wrap"><div class="pc-pill">Details — <em>CivicFix</em></div></div>
-        </div>
-        <div class="pc-info">
-          <div class="pc-title">CivicFix</div>
-          <div class="pc-tag">React.js · Node.js · Geolocation API</div>
+          <p class="pc-desc">Civic reporting platform mapping localized issues for municipal resolution.</p>
+          <div class="pc-actions">
+            <div class="pc-tech-row">
+              <span class="pc-tech-badge">React.js</span>
+              <span class="pc-tech-badge">Node.js</span>
+              <span class="pc-tech-badge">Express</span>
+              <span class="pc-tech-badge">MySQL</span>
+            </div>
+            <div class="pc-links">
+              <a href="https://github.com/akshat3021/CivicFix" target="_blank" rel="noopener noreferrer" class="pc-link-btn secondary" onclick="event.stopPropagation();" aria-label="CivicFix code link">Source</a>
+              <a href="https://civicfix-r2if.onrender.com/" target="_blank" rel="noopener noreferrer" class="pc-link-btn primary" onclick="event.stopPropagation();" aria-label="CivicFix Live Demo">Demo ↗</a>
+            </div>
+          </div>
         </div>
       </article>
 
-      <!-- E-Portfolio / SmartSeat -->
-      <article class="pc c7 rv d3" onclick="openModal('smartseat')" role="button" tabindex="0" aria-label="View SmartSeat project details">
-        <div class="pc-bg" style="background:linear-gradient(160deg,#120404 0%,#2a0808 50%,#180404 100%);" aria-hidden="true">
-          <div class="orb" style="width:180px;height:180px;background:#9f1239;bottom:-20px;right:40px;opacity:.45;"></div>
-          <div style="position:absolute;inset:0;padding:16px;overflow:hidden;">
-            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;height:100%;display:flex;flex-direction:column;font-family:'Courier New',monospace;">
-              <div style="background:rgba(255,255,255,.06);padding:7px 10px;display:flex;align-items:center;gap:5px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;">
-                <div style="width:7px;height:7px;border-radius:50%;background:rgba(255,90,90,.7);"></div>
-                <div style="width:7px;height:7px;border-radius:50%;background:rgba(255,200,0,.7);"></div>
-                <div style="width:7px;height:7px;border-radius:50%;background:rgba(50,200,80,.7);"></div>
-                <span style="font-size:8px;color:rgba(255,255,255,.35);margin-left:6px;">smartseat / server.js</span>
-              </div>
-              <div style="padding:10px;display:flex;flex-direction:column;gap:4px;font-size:9px;line-height:1.5;flex:1;overflow:hidden;">
-                <div><span style="color:#9cdcfe;">const</span> <span style="color:#4fc1ff;">seats</span> <span style="color:#d4d4d4;">=</span> <span style="color:#dcdcaa;">await</span> <span style="color:#4fc1ff;">db</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">query</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'SELECT * FROM seats'</span><span style="color:#d4d4d4;">);</span></div>
-                <div><span style="color:#c586c0;">if</span> <span style="color:#d4d4d4;">(seats.available &gt; </span><span style="color:#b5cea8;">0</span><span style="color:#d4d4d4;">) {</span></div>
-                <div style="padding-left:12px;"><span style="color:#4fc1ff;">socket</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">emit</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'seat-available'</span><span style="color:#d4d4d4;">, seats);</span></div>
-                <div><span style="color:#d4d4d4;">}</span></div>
-                <div style="height:1px;background:rgba(255,255,255,.06);margin:3px 0;"></div>
-                <div><span style="color:#6a9955;">// Real-time seat booking via Socket.io</span></div>
-                <div><span style="color:#4fc1ff;">io</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">on</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'connection'</span><span style="color:#d4d4d4;">, (</span><span style="color:#9cdcfe;">socket</span><span style="color:#d4d4d4;">) =&gt; {</span></div>
-                <div style="padding-left:12px;"><span style="color:#dcdcaa;">handleBooking</span><span style="color:#d4d4d4;">(socket);</span><span style="display:inline-block;width:7px;height:13px;background:rgba(255,255,255,.75);animation:blink 1s step-end infinite;margin-left:2px;vertical-align:middle;"></span></div>
-              </div>
+      <!-- SmartSeat -->
+      <article class="pc rv d3" onclick="openModal('smartseat')" role="button" tabindex="0" aria-label="View SmartSeat project details">
+        <!-- Ambient Color Glow backdrop -->
+        <div class="pc-glow" style="background: radial-gradient(circle, rgba(239,68,68,0.25) 0%, transparent 70%);"></div>
+
+        <!-- macOS-style browser frame header -->
+        <div class="browser-header">
+          <span class="browser-dot close"></span>
+          <span class="browser-dot minimize"></span>
+          <span class="browser-dot maximize"></span>
+          <div class="browser-address">smartseat.net</div>
+        </div>
+
+        <div class="pc-viewport">
+          <!-- Spotlight Cursor lighting effect layer -->
+          <div class="pc-spotlight"></div>
+          <!-- Actual Screenshot center-fit image -->
+          <img src="assets/SMARTSEAT.png" alt="SmartSeat reservation editor" class="pc-bg" loading="lazy">
+        </div>
+
+        <!-- Glass bottom slider overlay -->
+        <div class="pc-overlay">
+          <div class="pc-overlay-header">
+            <div>
+              <h3 class="pc-title">SmartSeat</h3>
+            </div>
+            <div class="pc-meta">
+              <span class="pc-year">2025</span>
+              <span class="pc-status">Live</span>
             </div>
           </div>
-        </div>
-        <div class="pc-ht" aria-hidden="true"></div>
-        <div class="pc-ov" aria-hidden="true">
-          <div class="pc-pill-wrap"><div class="pc-pill">Details — <em>SmartSeat</em></div></div>
-        </div>
-        <div class="pc-info">
-          <div class="pc-title">SmartSeat</div>
-          <div class="pc-tag">Node.js · Socket.io · MySQL · React</div>
+          <p class="pc-desc">Real-time seat reservation layout built with event locks preventing double booking.</p>
+          <div class="pc-actions">
+            <div class="pc-tech-row">
+              <span class="pc-tech-badge">Node.js</span>
+              <span class="pc-tech-badge">Socket.io</span>
+              <span class="pc-tech-badge">MySQL</span>
+              <span class="pc-tech-badge">React</span>
+            </div>
+            <div class="pc-links">
+              <a href="https://github.com/akshat3021" target="_blank" rel="noopener noreferrer" class="pc-link-btn secondary" onclick="event.stopPropagation();" aria-label="Smartseat code repository">Source</a>
+              <a href="https://smartseat-d3zt.onrender.com/" target="_blank" rel="noopener noreferrer" class="pc-link-btn primary" onclick="event.stopPropagation();" aria-label="SmartSeat Live Demo">Demo ↗</a>
+            </div>
+          </div>
         </div>
       </article>
 
@@ -1466,20 +1806,23 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
   requestAnimationFrame(tick);
 })();
 
+
 /* ── MAIN APP INIT ───────────────────────────────────────────── */
 function initApp() {
   setupHLS($('hv'), HLS);
   setupHLS($('fv'), HLS);
 
-  /* ── NAV SCROLL ──────────────────────────────────────────── */
-  const np = $('np');
-  window.addEventListener('scroll', () => { np.classList.toggle('sc', scrollY > 90); }, { passive: true });
+  /* ── STAR ENVIRONMENT BACKGROUND ──────────────────────────── */
+  initUniverse();
 
-  /* ── SCROLL REVEAL ───────────────────────────────────────── */
-  const ro = new IntersectionObserver(es => {
-    es.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-  }, { threshold: .1, rootMargin: '-40px' });
-  document.querySelectorAll('.rv').forEach(el => ro.observe(el));
+  /* ── CUSTOM CINEMATIC CURSOR & INTERACTIVE STATES ─────────── */
+  initCustomCursor();
+
+  /* ── DYNAMIC HEADER SCROLL ────────────────────────────────── */
+  initNavScrollBehavior();
+
+  /* ── SCROLL REVEAL (GSAP ADVANCED MASK REVEALS) ───────────── */
+  initScrollReveals();
 
   /* ── MARQUEE ─────────────────────────────────────────────── */
   (function(){
@@ -1489,16 +1832,23 @@ function initApp() {
     gsap.to(t, { xPercent: -50, duration: 38, ease: 'none', repeat: -1 });
   })();
 
-  /* ── GSAP PROJECT CARD HOVER TILT ─────────────────────────── */
+  /* ── GSAP PROJECT CARD HOVER TILT & LIGHTING SPOTLIGHT ────── */
   document.querySelectorAll('.pc').forEach(c => {
     c.addEventListener('mousemove', e => {
       const r = c.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width  - .5) * 8;
-      const y = ((e.clientY - r.top)  / r.height - .5) * -8;
-      gsap.to(c, { rotateX: y, rotateY: x, duration: .18, ease: 'none', transformPerspective: 900, transformOrigin: 'center' });
+      const x = ((e.clientX - r.left) / r.width  - .5) * 12;
+      const y = ((e.clientY - r.top)  / r.height - .5) * -12;
+      
+      // Calculate relative percentage coordinates for lighting spotlight glow
+      const px = ((e.clientX - r.left) / r.width) * 100;
+      const py = ((e.clientY - r.top) / r.height) * 100;
+      c.style.setProperty('--mouse-x', `${px}%`);
+      c.style.setProperty('--mouse-y', `${py}%`);
+      
+      gsap.to(c, { rotateX: y, rotateY: x, scale: 1.02, duration: .3, ease: 'power2.out', transformPerspective: 900, transformOrigin: 'center' });
     });
     c.addEventListener('mouseleave', () => {
-      gsap.to(c, { rotateX: 0, rotateY: 0, duration: .55, ease: 'power3.out' });
+      gsap.to(c, { rotateX: 0, rotateY: 0, scale: 1, duration: .6, ease: 'power3.out' });
     });
   });
 
@@ -1512,11 +1862,11 @@ function initApp() {
 
 /* ── HERO GSAP (called after loader) ────────────────────────── */
 function initHero() {
-  gsap.set('.nm-rev', { opacity: 0, y: 55 });
+  gsap.set('.nm-rev', { opacity: 0, y: 55, filter: 'blur(8px)' });
   gsap.set('.blur-in', { opacity: 0, filter: 'blur(12px)', y: 22 });
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  tl.to('.nm-rev',  { opacity: 1, y: 0, duration: 1.2, delay: .08 })
-    .to('.blur-in', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1, stagger: .12 }, '-=0.95');
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  tl.to('.nm-rev',  { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, delay: .1 })
+    .to('.blur-in', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, stagger: .15 }, '-=1.2');
 }
 
 /* ── ROLE ROTATOR ────────────────────────────────────────────── */
@@ -1536,6 +1886,217 @@ function initHero() {
     }, 280);
   }, 2200);
 })();
+
+/* ── CINEMATIC STARFIELD (PROCEDURAL UNIVERSE BACKGROUND) ───── */
+function initUniverse() {
+  const canvas = $('universe-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w = (canvas.width = window.innerWidth);
+  let h = (canvas.height = window.innerHeight);
+
+  const stars = [];
+  const starCount = Math.min(180, Math.floor((w * h) / 9000)); // performance limit stars based on screen size
+
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      size: Math.random() * 1.5,
+      speed: Math.random() * 0.05 + 0.01,
+      opacity: Math.random() * 0.5 + 0.3,
+      twinkle: Math.random() * 0.02
+    });
+  }
+
+  let mouseX = 0, mouseY = 0;
+  let targetX = 0, targetY = 0;
+
+  window.addEventListener('mousemove', e => {
+    targetX = (e.clientX - w / 2) * 0.05;
+    targetY = (e.clientY - h / 2) * 0.05;
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }, { passive: true });
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    
+    // Smooth easing mouse parallax
+    mouseX += (targetX - mouseX) * 0.08;
+    mouseY += (targetY - mouseY) * 0.08;
+
+    // Draw deep galactic haze
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.003)';
+    ctx.fillRect(0, 0, w, h);
+
+    // Render twinkling floating stars
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      // Twinkle dynamic changes
+      s.opacity += s.twinkle;
+      if (s.opacity > 0.95 || s.opacity < 0.2) {
+        s.twinkle = -s.twinkle;
+      }
+      
+      // Calculate offset with parallax coordinates
+      const sx = (s.x + mouseX * s.size) % w;
+      const sy = (s.y + mouseY * s.size) % h;
+
+      ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+      ctx.beginPath();
+      ctx.arc(sx < 0 ? sx + w : sx, sy < 0 ? sy + h : sy, s.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* ── PREMIUM SMOOTH CURSOR ──────────────────────────────────── */
+function initCustomCursor() {
+  const cursor = $('c-cursor');
+  const cursorRing = $('c-cursor-ring');
+  if (!cursor || !cursorRing) return;
+
+  let cx = window.innerWidth / 2;
+  let cy = window.innerHeight / 2;
+  let rx = cx;
+  let ry = cy;
+
+  let targetX = cx;
+  let targetY = cy;
+
+  window.addEventListener('mousemove', e => {
+    targetX = e.clientX;
+    targetY = e.clientY;
+  }, { passive: true });
+
+  // Elastic animation loop for trailing ring
+  function updateCursor() {
+    cx += (targetX - cx) * 0.25;
+    cy += (targetY - cy) * 0.25;
+
+    rx += (targetX - rx) * 0.12;
+    ry += (targetY - ry) * 0.12;
+
+    cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%)`;
+    cursorRing.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
+
+    requestAnimationFrame(updateCursor);
+  }
+  updateCursor();
+
+  // Attach hover states to all premium interactive elements
+  const hoverSelectors = 'a, button, .pc, .nav-logo, .nav-a, .nav-hi, .prof-card, .skills-grid .sp, .edu-card';
+  document.querySelectorAll(hoverSelectors).forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (el.classList.contains('pc')) {
+        document.body.classList.add('c-explore-active');
+      } else {
+        document.body.classList.add('c-hover-active');
+      }
+    });
+    el.addEventListener('mouseleave', () => {
+      document.body.classList.remove('c-hover-active', 'c-explore-active');
+    });
+  });
+}
+
+/* ── SMART HIDING/REVEALING HEADER NAVIGATION ─────────────── */
+function initNavScrollBehavior() {
+  const nav = $('nav');
+  if (!nav) return;
+  
+  let lastScrollY = window.scrollY;
+  const threshold = 10;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    
+    // Toggle navigation background glow state
+    const np = $('np');
+    if (np) np.classList.toggle('sc', currentScrollY > 90);
+
+    // Hide on scroll down, show on scroll up
+    if (Math.abs(currentScrollY - lastScrollY) > threshold) {
+      if (currentScrollY > lastScrollY && currentScrollY > 200) {
+        nav.classList.add('nav-hidden');
+      } else {
+        nav.classList.remove('nav-hidden');
+      }
+    }
+    lastScrollY = currentScrollY;
+
+    // Dynamically update scroll progress nav dots highlight
+    updateActiveNavIndicator();
+  }, { passive: true });
+}
+
+/* ── TRACK ACTIVE SCROLL SECTION AND NAV INDICATOR ────────── */
+function updateActiveNavIndicator() {
+  const sections = ['hero', 'about', 'experience', 'works', 'skills'];
+  const navLinks = document.querySelectorAll('#np .nav-a');
+  if (!navLinks.length) return;
+
+  let activeSectionIndex = 0;
+  const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+  for (let i = 0; i < sections.length; i++) {
+    const el = $(sections[i]);
+    if (el && scrollPosition >= el.offsetTop) {
+      activeSectionIndex = i;
+    }
+  }
+
+  navLinks.forEach((link, index) => {
+    if (index === activeSectionIndex) {
+      link.classList.add('on');
+    } else {
+      link.classList.remove('on');
+    }
+  });
+}
+
+/* ── ADVANCED TIMELINE AND FADE-IN SCROLL REVEALS ──────────── */
+function initScrollReveals() {
+  // Animate Timeline line growth
+  gsap.fromTo('.exp-list::before', 
+    { scaleY: 0 }, 
+    { 
+      scaleY: 1, 
+      ease: 'none', 
+      scrollTrigger: {
+        trigger: '#experience',
+        start: 'top center',
+        end: 'bottom center',
+        scrub: true
+      }
+    }
+  );
+
+  // Classic scroll trigger fade-blur reveals
+  document.querySelectorAll('.rv').forEach(el => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 35, filter: 'blur(4px)' },
+      {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+  });
+}
 </script>
 </body>
 </html>

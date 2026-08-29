@@ -55,7 +55,7 @@ export default function Contact() {
   ];
 
   return (
-    <section className="py-24 px-8 text-textOffWhite max-w-6xl mx-auto relative border-t border-border/10">
+    <section className="py-16 md:py-24 px-4 md:px-8 text-textOffWhite max-w-6xl mx-auto relative border-t border-border/10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
         
         {/* Contact Info (Left) */}
@@ -63,7 +63,7 @@ export default function Contact() {
           <p className="text-accentBlue tracking-[0.25em] text-xs font-semibold uppercase mb-2">
             LET'S CONNECT
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold font-sans text-textOffWhite mb-6">
+          <h2 className="text-2xl md:text-4xl font-bold font-sans text-textOffWhite mb-6">
             Get in touch
           </h2>
           <p className="text-gray-400 text-base md:text-lg max-w-xl mb-10 leading-relaxed">

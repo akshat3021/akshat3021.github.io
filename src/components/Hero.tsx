@@ -6,6 +6,17 @@ export default function Hero() {
   const words = ['Cloud', 'Full-Stack', 'AI-Powered'];
   const [wordIndex, setWordIndex] = React.useState(0);
   const shouldReduceMotion = useReducedMotion();
+  const [introCompleted, setIntroCompleted] = React.useState(() => {
+    return sessionStorage.getItem('hasStarted') === 'true';
+  });
+
+  React.useEffect(() => {
+    const handleIntroComplete = () => {
+      setIntroCompleted(true);
+    };
+    window.addEventListener('intro-completed', handleIntroComplete);
+    return () => window.removeEventListener('intro-completed', handleIntroComplete);
+  }, []);
 
   React.useEffect(() => {
     if (shouldReduceMotion) return;
@@ -52,7 +63,9 @@ export default function Hero() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center justify-center pt-24 pb-16"
+        className={`relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center justify-center pt-24 pb-16 transition-opacity duration-500 ${
+          !introCompleted ? 'opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto' : 'opacity-100'
+        }`}
       >
         {/* Eyebrow, letter-spaced caps */}
         <motion.p
@@ -65,7 +78,7 @@ export default function Hero() {
         {/* Name */}
         <motion.h1
           variants={itemVariants}
-          className="text-5xl md:text-7xl font-bold font-sans text-textOffWhite mb-6 tracking-tight"
+          className="text-4xl sm:text-5xl md:text-7xl font-bold font-sans text-textOffWhite mb-4 md:mb-6 tracking-tight"
         >
           Akshat Aswal
         </motion.h1>
@@ -73,11 +86,11 @@ export default function Hero() {
         {/* Tagline */}
         <motion.h2
           variants={itemVariants}
-          className="text-2xl md:text-4xl text-textOffWhite/90 mb-6 font-sans font-light tracking-wide min-h-[44px] md:min-h-[56px] flex items-center justify-center flex-wrap"
+          className="text-xl sm:text-2xl md:text-4xl text-textOffWhite/90 mb-6 font-sans font-light tracking-wide min-h-[36px] sm:min-h-[44px] md:min-h-[56px] flex items-center justify-center flex-wrap"
         >
           <span className="whitespace-pre">A </span>
           {/* Inline fixed-width container left-aligned to prevent text reflow while keeping natural left spacing */}
-          <span className="inline-flex relative h-[36px] md:h-[48px] overflow-hidden align-bottom justify-start min-w-[130px] md:min-w-[210px]">
+          <span className="inline-flex relative h-[28px] sm:h-[36px] md:h-[48px] overflow-hidden align-bottom justify-start min-w-[110px] sm:min-w-[130px] md:min-w-[210px]">
             <AnimatePresence mode="wait">
               <motion.span
                 key={words[wordIndex]}
@@ -97,7 +110,7 @@ export default function Hero() {
         {/* Subtext */}
         <motion.p
           variants={itemVariants}
-          className="text-base md:text-lg text-gray-400 max-w-2xl mb-12 font-sans font-normal leading-relaxed"
+          className="text-sm md:text-lg text-gray-400 max-w-2xl mb-10 md:mb-12 font-sans font-normal leading-relaxed px-4 md:px-0"
         >
           B.Tech CSE student crafting full-stack applications, cloud solutions, and AI-powered products that solve real problems.
         </motion.p>

@@ -85,7 +85,7 @@ export default function SoundToggle() {
   return (
     <AnimatePresence>
       {introCompleted && (
-        <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-1.5 select-none pointer-events-auto">
+        <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] right-4 md:bottom-6 md:right-6 z-50 flex flex-col items-center gap-1.5 select-none pointer-events-auto">
           <motion.button
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -93,13 +93,15 @@ export default function SoundToggle() {
             transition={{ duration: 0.5 }}
             onClick={toggleSound}
             aria-label="Toggle background music"
-            className="w-11 h-11 rounded-full bg-bgNearBlack/60 backdrop-blur-md border border-accentBlue/30 hover:border-accentBlue text-accentBlue hover:text-textOffWhite hover:bg-accentBlue/10 transition-all duration-300 flex items-center justify-center cursor-pointer relative shadow-[0_0_12px_rgba(110,168,232,0.08)]"
+            className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-bgNearBlack/60 backdrop-blur-md border border-accentBlue/30 hover:border-accentBlue text-accentBlue hover:text-textOffWhite hover:bg-accentBlue/10 transition-all duration-300 flex items-center justify-center cursor-pointer relative shadow-[0_0_12px_rgba(110,168,232,0.08)]"
             title={isPlaying ? "Mute music" : "Play ambient music"}
           >
             {/* Pulse ping animation around the ring button */}
             <span className="absolute inset-0 rounded-full border border-accentBlue/30 animate-ping opacity-60 pointer-events-none" />
             
-            {isPlaying ? speakerPlayingSvg : speakerMutedSvg}
+            <div className="scale-[0.8] md:scale-100 flex items-center justify-center">
+              {isPlaying ? speakerPlayingSvg : speakerMutedSvg}
+            </div>
           </motion.button>
           
           <AnimatePresence>

@@ -138,7 +138,7 @@ export default function Skills() {
   };
 
   return (
-    <section id="skills" className="py-24 px-8 text-textOffWhite max-w-6xl mx-auto relative border-t border-border/10">
+    <section id="skills" className="py-16 md:py-24 px-4 md:px-8 text-textOffWhite max-w-6xl mx-auto relative border-t border-border/10">
       
       {/* 1. Skills Grid */}
       <div className="mb-24">
@@ -146,7 +146,7 @@ export default function Skills() {
           <p className="text-accentBlue tracking-[0.25em] text-xs font-semibold uppercase mb-2">
             TECHNOLOGIES I USE
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold font-sans text-textOffWhite">
+          <h2 className="text-2xl md:text-4xl font-bold font-sans text-textOffWhite">
             Technologies I use
           </h2>
         </div>
@@ -239,7 +239,7 @@ export default function Skills() {
           <p className="text-accentBlue tracking-[0.25em] text-xs font-semibold uppercase mb-2">
             FIND ME ONLINE
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold font-sans text-textOffWhite">
+          <h2 className="text-2xl md:text-4xl font-bold font-sans text-textOffWhite">
             Coding profiles
           </h2>
         </div>

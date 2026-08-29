@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
+import data from '../data/education.json';
 
 interface EducationItem {
   id: number;
@@ -13,38 +14,7 @@ interface EducationItem {
 
 export default function Education() {
   const shouldReduceMotion = useReducedMotion();
-  const educationData: EducationItem[] = [
-    {
-      id: 1,
-      title: 'B.Tech Computer Science & Engineering',
-      institution: 'Graphic Era University',
-      location: 'Dehradun, Uttarakhand',
-      badges: ['Expected Graduation: 2028', 'B.TECH CSE'],
-      coursework: [
-        'Data Structures & Algorithms',
-        'Operating Systems',
-        'DBMS',
-        'Computer Networks',
-        'Software Engineering',
-        'Cloud Computing',
-      ],
-    },
-    {
-      id: 2,
-      title: 'Higher Secondary Education',
-      institution: 'St Thomas School',
-      location: 'Pauri, Uttarakhand',
-      badges: ['Class XII', '2024'],
-      stream: 'PCM',
-    },
-    {
-      id: 3,
-      title: 'Secondary Education',
-      institution: 'St Thomas School',
-      location: 'Pauri, Uttarakhand',
-      badges: ['Class X', '2022'],
-    },
-  ];
+  const educationData: EducationItem[] = data as EducationItem[];
 
   const gridVariants: Variants = {
     hidden: {},
@@ -91,13 +61,13 @@ export default function Education() {
   );
 
   return (
-    <section className="py-24 px-8 text-textOffWhite max-w-6xl mx-auto">
+    <section className="py-16 md:py-24 px-4 md:px-8 text-textOffWhite max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-left mb-16">
         <p className="text-accentBlue tracking-[0.25em] text-xs font-semibold uppercase mb-2">
           Education
         </p>
-        <h2 className="text-3xl md:text-4xl font-bold font-sans text-textOffWhite mb-4">
+        <h2 className="text-2xl md:text-4xl font-bold font-sans text-textOffWhite mb-4">
           Academic <span className="font-serif-accent italic text-accentBlue">background</span>
         </h2>
       </div>

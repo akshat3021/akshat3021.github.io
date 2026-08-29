@@ -147,13 +147,13 @@ export default function About() {
   };
 
   return (
-    <section className="py-24 px-8 text-textOffWhite max-w-6xl mx-auto">
+    <section className="py-16 md:py-24 px-4 md:px-8 text-textOffWhite max-w-6xl mx-auto">
       {/* Eyebrow / Header */}
       <div className="text-left mb-16">
         <p className="text-accentBlue tracking-[0.25em] text-xs font-semibold uppercase mb-2">
           ABOUT ME
         </p>
-        <h2 className="text-3xl md:text-4xl font-bold font-sans text-textOffWhite mb-4">
+        <h2 className="text-2xl md:text-4xl font-bold font-sans text-textOffWhite mb-4">
           Who I <span className="font-serif-accent italic text-accentBlue">am</span>
         </h2>
       </div>

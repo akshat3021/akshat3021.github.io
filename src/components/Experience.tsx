@@ -23,12 +23,12 @@ export default function Experience() {
   };
 
   return (
-    <section className="py-24 px-8 text-textOffWhite max-w-4xl mx-auto relative border-t border-border/10">
+    <section className="py-16 md:py-24 px-4 md:px-8 text-textOffWhite max-w-4xl mx-auto relative border-t border-border/10">
       <div className="mb-16">
         <p className="text-accentBlue tracking-[0.25em] text-xs font-semibold uppercase mb-2">
           EXPERIENCE
         </p>
-        <h2 className="text-3xl md:text-4xl font-bold font-sans text-textOffWhite mb-4">
+        <h2 className="text-2xl md:text-4xl font-bold font-sans text-textOffWhite mb-4">
           Where I've worked
         </h2>
         <p className="text-gray-400 text-base md:text-lg max-w-xl">

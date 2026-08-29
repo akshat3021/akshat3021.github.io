@@ -1,9 +1,10 @@
 [
   {
     "id": 1,
-    "degree": "B.Tech Computer Science & Engineering",
-    "institution": "Graphic Era University, Dehradun, Uttarakhand",
-    "timeline": "Expected Graduation: 2028",
+    "title": "B.Tech Computer Science & Engineering",
+    "institution": "Graphic Era University",
+    "location": "Dehradun, Uttarakhand",
+    "badges": ["Expected Graduation: 2028", "B.TECH CSE"],
     "coursework": [
       "Data Structures & Algorithms",
       "Operating Systems",
@@ -15,28 +16,17 @@
   },
   {
     "id": 2,
-    "degree": "Higher Secondary Education (ISC)",
-    "institution": "The Doon School / ISC Board",
-    "timeline": "Completed: 2024",
-    "coursework": [
-      "Physics",
-      "Chemistry",
-      "Mathematics",
-      "Computer Science",
-      "English"
-    ]
+    "title": "Higher Secondary Education",
+    "institution": "St. Thomas School",
+    "location": "Pauri, Uttarakhand",
+    "badges": ["Class XII", "2024", "Board: ISC"],
+    "stream": "PCM"
   },
   {
     "id": 3,
-    "degree": "Secondary Education (ICSE)",
-    "institution": "The Doon School / ICSE Board",
-    "timeline": "Completed: 2022",
-    "coursework": [
-      "Mathematics",
-      "Science",
-      "Computer Applications",
-      "English",
-      "Social Studies"
-    ]
+    "title": "Secondary Education",
+    "institution": "St. Thomas School",
+    "location": "Pauri, Uttarakhand",
+    "badges": ["Class X", "2022", "Board: ICSE"]
   }
 ]

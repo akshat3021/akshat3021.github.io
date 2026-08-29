@@ -84,7 +84,7 @@ export default function Stats() {
   };
 
   return (
-    <section className="py-24 px-8 text-textOffWhite max-w-6xl mx-auto">
+    <section className="py-16 md:py-24 px-4 md:px-8 text-textOffWhite max-w-6xl mx-auto">
       {/* Grid of Stats Cards */}
       <motion.div
         variants={gridVariants}

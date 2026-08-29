@@ -78,7 +78,7 @@ export default function Nav() {
             <button
               onClick={() => scrollToSection('home')}
               aria-label="Scroll to home"
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-accentBlue/30 bg-bgNearBlack text-accentBlue font-bold text-lg tracking-wider hover:border-accentBlue transition-colors duration-300 cursor-pointer"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-accentBlue/30 bg-bgNearBlack text-accentBlue font-bold text-lg tracking-wider hover:border-accentBlue transition-colors duration-300 cursor-pointer shrink-0"
             >
               AA
             </button>
@@ -96,7 +96,7 @@ export default function Nav() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`text-sm font-medium transition-colors duration-300 cursor-pointer ${
+                  className={`text-sm font-medium transition-colors duration-300 cursor-pointer min-h-[44px] flex items-center ${
                     activeSection === item.id
                       ? 'text-accentBlue font-semibold'
                       : 'text-textOffWhite/70 hover:text-accentBlue'
@@ -110,7 +110,7 @@ export default function Nav() {
             {/* "Say hi ↗" pill button */}
             <button
               onClick={() => scrollToSection('contact')}
-              className="px-5 py-2 rounded-full bg-accentBlue text-bgNearBlack font-semibold text-sm hover:bg-accentBlue/80 transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(110,168,232,0.2)]"
+              className="px-5 min-h-[44px] flex items-center rounded-full bg-accentBlue text-bgNearBlack font-semibold text-sm hover:bg-accentBlue/80 transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(110,168,232,0.2)]"
             >
               Say hi ↗
             </button>

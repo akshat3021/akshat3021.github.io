@@ -5,19 +5,36 @@ export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
     
-    // Simulate async submission
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+    try {
+      const response = await fetch('https://formspree.io/f/mljedpjq', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
       
-      // Reset success state after a few seconds
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        // Reset success state after a few seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('error');
+        // Reset error state after a few seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setStatus('error');
+      // Reset error state after a few seconds
       setTimeout(() => setStatus('idle'), 5000);
-    }, 1500);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -134,6 +151,24 @@ export default function Contact() {
                 </div>
                 <h3 className="text-2xl font-bold text-textOffWhite mb-2">Message Sent!</h3>
                 <p className="text-gray-400 text-sm">Thank you for reaching out. I'll get back to you as soon as possible.</p>
+              </motion.div>
+            ) : status === 'error' ? (
+              <motion.div
+                key="error"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-bgNearBlack/95 backdrop-blur-sm z-10"
+              >
+                <div className="w-16 h-16 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mb-6">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-textOffWhite mb-2">Oops!</h3>
+                <p className="text-gray-400 text-sm">Something went wrong. Please try again later or email me directly.</p>
               </motion.div>
             ) : null}
           </AnimatePresence>

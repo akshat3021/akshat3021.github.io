@@ -268,23 +268,25 @@ export default function About() {
                     <span className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-accentBlue border-2 border-bgNearBlack shadow-[0_0_8px_#6EA8E8]" />
                     
                     <h4 className="text-base font-bold text-textOffWhite tracking-tight">
-                      {edu.degree}
+                      {edu.title || edu.degree}
                     </h4>
                     <p className="text-xs text-gray-500 font-medium tracking-wide mt-1">
-                      {edu.institution} &middot; <span className="text-accentBlue">{edu.timeline}</span>
+                      {edu.institution} &middot; <span className="text-accentBlue">{(edu.badges || []).join(' | ') || edu.timeline}</span>
                     </p>
                     
                     {/* Coursework Tags */}
-                    <div className="flex flex-wrap gap-1.5 mt-3">
-                      {edu.coursework.map((course: string) => (
-                        <span
-                          key={course}
-                          className="text-[9px] tracking-wide text-gray-400 bg-bgNearBlack border border-gray-800 px-2 py-0.5 rounded"
-                        >
-                          {course}
-                        </span>
-                      ))}
-                    </div>
+                    {edu.coursework && (
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {edu.coursework.map((course: string) => (
+                          <span
+                            key={course}
+                            className="px-2 py-0.5 rounded-full bg-textOffWhite/5 border border-textOffWhite/10 text-gray-400 text-[10px]"
+                          >
+                            {course}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

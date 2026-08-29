@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "degree": "B.Tech Computer Science & Engineering",
+    "institution": "Graphic Era University, Dehradun, Uttarakhand",
+    "timeline": "Expected Graduation: 2028",
+    "coursework": [
+      "Data Structures & Algorithms",
+      "Operating Systems",
+      "DBMS",
+      "Computer Networks",
+      "Software Engineering",
+      "Cloud Computing"
+    ]
+  },
+  {
+    "id": 2,
+    "degree": "Higher Secondary Education (ISC)",
+    "institution": "The Doon School / ISC Board",
+    "timeline": "Completed: 2024",
+    "coursework": [
+      "Physics",
+      "Chemistry",
+      "Mathematics",
+      "Computer Science",
+      "English"
+    ]
+  },
+  {
+    "id": 3,
+    "degree": "Secondary Education (ICSE)",
+    "institution": "The Doon School / ICSE Board",
+    "timeline": "Completed: 2022",
+    "coursework": [
+      "Mathematics",
+      "Science",
+      "Computer Applications",
+      "English",
+      "Social Studies"
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Web Development Intern",
+    "company": "InAmigos Foundation",
+    "dates": "July 2026",
+    "description": "Contributing as a frontend and user experience developer to build robust digital platforms for community initiatives and organizational programs.",
+    "bullets": [
+      "Designing and developing highly responsive, mobile-first web interfaces.",
+      "Building modern, accessible, and inclusive user experiences adhering to WCAG guidelines.",
+      "Contributing to NGO web applications, improving client-side logic and system flow.",
+      "Collaborating with industry mentors and cross-functional team members to align digital strategies.",
+      "Writing clean, maintainable, and reusable component code to optimize system performance.",
+      "Participating actively in feature development, testing, and continuous UI updates."
+    ],
+    "tech": ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS", "Git", "GitHub"]
+  }
+]

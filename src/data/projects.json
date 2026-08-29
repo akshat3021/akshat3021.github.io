@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1,
+    "title": "Aegis Intelligence",
+    "year": "2026",
+    "status": "LIVE",
+    "description": "AI productivity companion featuring memory retention pipelines & 3D interface.",
+    "url": "https://aegis-intelligence-v2.vercel.app",
+    "git": "https://github.com/akshat3021/Aegis-Intelligence-V2",
+    "domain": "aegis-intelligence.app",
+    "imageKey": "aegis",
+    "tech": ["AI", "Vector DB", "3D Interface", "Next.js", "React"]
+  },
+  {
+    "id": 2,
+    "title": "Cloud File Storage",
+    "year": "2025",
+    "status": "LIVE",
+    "description": "Secure file browser platform featuring folder organization and quota tracking.",
+    "url": "https://filedalokhiseb.netlify.app",
+    "git": "https://github.com/akshat3021/cloud-file-storage",
+    "domain": "file-storage.net",
+    "imageKey": "cloudstorage",
+    "tech": ["React", "Node.js", "MongoDB", "Auth", "Netlify"]
+  },
+  {
+    "id": 3,
+    "title": "CivicFix",
+    "year": "2026",
+    "status": "LIVE",
+    "description": "Civic reporting platform mapping localized issues for municipal resolution.",
+    "url": "https://civicfix-r2if.onrender.com",
+    "git": "https://github.com/akshat3021/CivicFix",
+    "domain": "civicfix.org",
+    "imageKey": "civicfix",
+    "tech": ["React", "Express", "Node.js", "Leaflet Maps", "Render"]
+  },
+  {
+    "id": 4,
+    "title": "SmartSeat",
+    "year": "2026",
+    "status": "LIVE",
+    "description": "Real-time seat reservation layout built with event locks preventing double booking.",
+    "url": "https://smartseat-d3zt.onrender.com",
+    "git": "https://github.com/akshat3021/SmartSeat",
+    "domain": "smartseat.net",
+    "imageKey": "smartseat",
+    "tech": ["Node.js", "Socket.io", "MySQL", "React"]
+  },
+  {
+    "id": 5,
+    "title": "BookMySlot",
+    "year": "2026",
+    "status": "LIVE",
+    "description": "Appointment booking platform for small businesses with calendar integration.",
+    "url": "https://book-my-slot-mu.vercel.app",
+    "git": "https://github.com/akshat3021/bookmyslot",
+    "domain": "book-my-slot-mu.vercel.app",
+    "imageKey": "bookmyslot",
+    "tech": ["React", "Node.js", "MongoDB", "Tailwind CSS"]
+  }
+]
+
